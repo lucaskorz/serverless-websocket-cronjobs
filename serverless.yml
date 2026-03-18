@@ -1,0 +1,35 @@
+org: lkorz
+service: wsapi
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  architecture: arm64
+  region: us-east-1
+
+package: 
+  individually: true
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
+    exclude:
+      - '@aws-sdk/*'
+
+functions:
+  wsConnection:
+    handler: src/functions/wsConnection.handler
+    events:
+      - websocket:
+          route: $connect
+      - websocket:
+          route: $disconnect
+      - websocket:
+          route: sendMessage
+  healthCheck:
+    handler: src/functions/healthCheck.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /healthCheck
