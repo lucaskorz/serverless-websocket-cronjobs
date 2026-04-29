@@ -7,6 +7,7 @@ import { apigwClient } from '../clients/apigwClient.js';
 
 export async function handler(event: APIGatewayProxyWebsocketEventV2) {
   const { message } = JSON.parse(event.body ?? '{}');
+
   const paginator = paginateScan(
     { client: dynamoDBClient },
     { TableName: env.connectionsTable }
